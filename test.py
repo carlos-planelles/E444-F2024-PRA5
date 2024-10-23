@@ -1,8 +1,9 @@
 import time
 import requests
+import matplotlib.pyplot as plt
 
-# URL = "http://planelle.us-east-2.elasticbeanstalk.com/"
-URL = "http://127.0.0.1:5000/"
+URL = "http://planelle.us-east-2.elasticbeanstalk.com/"
+# URL = "http://127.0.0.1:5000/"
 
 TEXT_DOCS_FAKE = (
     "A recent study conducted by the University of Nutrition found that eating three bars of chocolate a day results in immediate weight loss. The researchers claim that chocolate boosts metabolism so effectively that most participants shed five pounds within a week without changing their diet. Despite skepticism from the medical community, the findings have sparked a surge in chocolate sales nationwide.",
@@ -30,14 +31,22 @@ def test_latency():
         {"documents": TEXT_DOCS_FAKE[1] + TEXT_DOCS_REAL[1]},
     ]
     timestamps = ""
-    for i in range(100):
-        before = time.time()
-        requests.post(url=URL + "is-fake", json=data[i % 4])
-        after = time.time()
-        timestamps += f"{before},{after},{after-before}\n"
+    latencies = []
+    for i in range(4):
+        for _ in range(100):
+            before = time.time()
+            requests.post(url=URL + "is-fake", json=data[i])
+            after = time.time()
+            timestamps += f"{i},{before},{after},{after-before}\n"
+            latencies.append(after - before)
 
     with open("timestamps.csv", "w") as f:
         f.write(timestamps)
+
+    plt.boxplot(latencies)
+    plt.title("API Latency Distribution Across Requests")
+    plt.ylabel("Latency (Seconds)")
+    plt.show()
 
 
 if __name__ == "__main__":
