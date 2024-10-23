@@ -13,12 +13,12 @@ def index():
 
 @application.route("/is-fake", methods=["POST"])
 def is_fake():
-    data = request.get_json()
+    data = request.json
 
     docs = data["documents"]
 
     model, vectorizer = load_model()
-    prediction = model.predict(vectorizer.transform(docs))
+    prediction = model.predict(vectorizer.transform(docs)).tolist()
 
     return jsonify({"results": prediction})
 
