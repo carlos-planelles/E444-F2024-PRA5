@@ -35,4 +35,4 @@ Returns a list of "REAL" or "FAKE" classes for the list of documents passed
 
 ## Latency distribution
 
-![Latency distribution box plot](Latency Box Plot.png)
+![Latency distribution box plot](latencies_box_plot.png)
