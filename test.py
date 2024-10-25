@@ -31,14 +31,14 @@ def test_latency():
         {"documents": TEXT_DOCS_FAKE[1] + TEXT_DOCS_REAL[1]},
     ]
     timestamps = ""
-    latencies = []
+    latencies = [[], [], [], []]
     for i in range(4):
         for _ in range(100):
             before = time.time()
             requests.post(url=URL + "is-fake", json=data[i])
             after = time.time()
             timestamps += f"{i},{before},{after},{after-before}\n"
-            latencies.append(after - before)
+            latencies[i].append(after - before)
 
     with open("timestamps.csv", "w") as f:
         f.write(timestamps)
